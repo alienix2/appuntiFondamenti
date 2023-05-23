@@ -753,8 +753,8 @@ flagstyle/dr/.style 2 args={
 % Adapted from https://tex.stackexchange.com/questions/483953/how-to-add-new-macros-like-author-without-editing-latex-ltx?noredirect=1&lq=1
 \makeatother
 
-\title{Cose da sapere per l'esame di Fondamenti di informatica\\\large{Basato su su un'analisi personale dei vecchi compiti e su opinioni personali (di un informatico vero, NON ingegniere)}}
-\author{Black cat}
+\title{Cose da sapere per l'esame di Fondamenti di informatica V1.0\\\large{Basato su su un'analisi personale dei vecchi compiti e su opinioni personali (di un informatico vero, NON ingegniere)}}
+\author{Matte Moni}
 \date{\today} % Replace with \today to show the current date
 
 % Based on 'Fun Template 1', available at https://www.overleaf.com/latex/templates/fun-template-1/drwvdzsrpgzz
@@ -767,17 +767,18 @@ flagstyle/dr/.style 2 args={
 \definecolor{tcol_CNT2}{HTML}{72E094} % Second color for Contents
 \definecolor{tcol_CNV1}{HTML}{8E44AD} % First color for Conventions
 \definecolor{tcol_CNV2}{HTML}{A10B49} % First color for Conventions
+\definecolor{bianco}{HTML}{FFFFFF}  %Colore bianco
 
 \begin{tcolorbox}[enhanced,
     title = Indice degli argomenti,
     fonttitle=\fontsize{20}{24}\sffamily\bfseries\selectfont,
     coltitle=black,
     fontupper=\sffamily,
-    interior style={left color=tcol_CNT1!80,right color=tcol_CNT2!80},
+    interior style={left color=bianco,right color=bianco},
     frame style={left color=tcol_CNT1!60!black,right color=tcol_CNT2!60!black},
     attach boxed title to top center={yshift=10pt},
     boxed title style={frame hidden,
-        interior style={left color=tcol_CNT1,right color=tcol_CNT2},
+        interior style={left color=bianco,right color=bianco},
         frame style={left color=tcol_CNT1!60!black,right color=tcol_CNT2!60!black},
         height=24pt,bean arc,drop fuzzy shadow
     },
@@ -791,7 +792,7 @@ flagstyle/dr/.style 2 args={
 \end{tcolorbox}
 \newpage
 \setcounter{section}{-1}
-\tcblistof[\section]{temi}{Lista riassuntiva di tutto}
+\tcblistof[\section]{temi}{Lista schietta di tutto}
 
 \newpage
 \section{Comandi da sapere per forza}
@@ -856,7 +857,7 @@ Date due variabili \pyth{a,b = 0,0} come eseguire altri tipi di operazioni fra l
 \end{proof}
 
 \newpage
-\subsection{Liste (e strutture dati monodimensionali in generale)}
+\subsection{Liste e altre strutture dati monodimensionali}
 Quello che viene espresso in questa sezione riguarda la liste. Verrà anche data una breve spiegazione di cosa sono i set e i dizionari. Ho visto poco usati questi ultimi due negli esercizi, se non per casi molto specifici. \textbf{Nella sezione delle solutions to common problems}, ci sono le applicazioni principali di set e dizionari (una per ognuno) che al prof. piacciono tanto e che in effetti sono molto carine e si usano anche nella vita reale.
 
 \begin{definition}{Creare una lista}{}
