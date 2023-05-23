@@ -1,0 +1,1392 @@
+\documentclass[10pt]{extarticle}
+
+%\usepackage{selectp}
+%\outputonly{1,2,3,4,5,6,7,8,9,10,11,12,13,14}
+
+\usepackage[table,dvipsnames]{xcolor}
+\usepackage[english]{babel}
+\usepackage{pythonhighlight}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage[normalem]{ulem}
+\usepackage{indentfirst}
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{mathtools} % Wraparound amsmath. For fancy math typesetting
+\usepackage[nointegrals]{wasysym} % nointegrals prevents wasysym from overwriting integral symbols from LaTeX and amsmath
+\usepackage{bbm} % For extended bold and blackboard bold characters
+\usepackage[italicdiff]{physics} % italicdiff causes derivatives to be rendered with italic d's instead of upright d's
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes} % Must be loaded AFTER inputenc
+\usepackage[a4paper,top=0.5in,bottom=0.2in,left=0.5in,right=0.5in,footskip=0.3in,includefoot]{geometry}
+\usepackage[most]{tcolorbox}
+\usepackage{tikz,tikz-3dplot,tikz-cd,tkz-tab,tkz-euclide,pgf,pgfplots}
+\usepackage{multicol}
+\pgfplotsset{compat=newest}
+\usepackage[bottom,multiple]{footmisc} % Ensures footnotes are at the bottom of the page, and separates footnotes by a comma if they are adjacent
+\usepackage[backend=bibtex,style=numeric]{biblatex}
+\renewcommand*{\finalnamedelim}{\addcomma\addspace} % Forces authors' names to be separated by comma, instead of "and"
+\usepackage[T1]{fontenc}
+\usepackage{xparse}
+\usepackage{xstring}
+% \usepackage{pifont} % For unusual symbols
+% \usepackage{mathdots} % For unusual combinations of dots
+\usepackage{wrapfig}
+\usepackage{lmodern,mathrsfs}
+\usepackage[inline,shortlabels]{enumitem}
+\setlist{topsep=2pt,itemsep=2pt,parsep=0pt,partopsep=0pt}
+% \usepackage{comment} % For commenting large blocks of text and math efficiently
+% \usepackage{fancyvrb} % For custom verbatim environments
+\addbibresource{bibliography}
+\usepackage[colorlinks,linkcolor=.,citecolor=blue,urlcolor=violet]{hyperref}
+\usepackage[nameinlink]{cleveref} % nameinlink ensures that the entire element is clickable in the pdf, not just the number
+\newcommand{\remind}[1]{\textcolor{red}{\textbf{#1}}} % To remind me of unfinished work to fix later
+\newcommand{\hide}[1]{} % To hide large blocks of code without using % symbols
+
+% Same as \href, but the text appears in typewriter font and in a custom color
+\newcommand{\Href}[3][red!50!black]{\href{#2}{\textcolor{#1}{\texttt{#3}}}}
+\newcommand{\ep}{\varepsilon}
+\newcommand{\vp}{\varphi}
+\newcommand{\lam}{\lambda}
+\newcommand{\Lam}{\Lambda}
+\DeclareDocumentCommand\ip{ l m }{\braces#1{\langle}{\rangle}{#2}} % Inner product ⟨x,y⟩ (but only one argument is taken, so \ip{x,y} renders as ⟨x,y⟩)
+\DeclareDocumentCommand\floor{ l m }{\braces#1{\lfloor}{\rfloor}{#2}} % Floor function ⌊x⌋
+\DeclareDocumentCommand\ceil{ l m }{\braces#1{\lceil}{\rceil}{#2}} % Ceiling function ⌈x⌉
+
+% Shortcuts for blackboard bold letters, e.g. \A outputs \mathbb{A}
+\def\do#1{\csdef{#1}{\mathbb{#1}}}
+\docsvlist{A,B,C,D,E,F,G,I,J,K,M,N,Q,R,T,U,V,W,X,Y,Z}
+% \H is already defined as a 1-argument command, it places a double acute accent (hungarumlaut) on a character, e.g. \H{o} yields ő
+% \L is already defined as the uppercase Ł (L with stroke)
+% \O is already defined as the uppercase Ø (O with stroke)
+% \P is already defined as the pilcrow ¶ (paragraph mark)
+% \S is already defined as the section sign §
+
+% Shortcuts for calligraphic letters, e.g. \As outputs \mathcal{A}
+\def\do#1{\csdef{#1s}{\mathcal{#1}}}
+\docsvlist{A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+
+% Shortcuts for letters with a bar on top, e.g. \Abar outputs \overline{A}
+\def\do#1{\csdef{#1bar}{\overline{#1}}}
+\docsvlist{a,b,c,d,e,f,g,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+% \hbar is already defined as the symbol ℏ (reduced Planck constant)
+
+% Shortcuts for boldface letters, e.g. \Ab outputs \textbf{A}
+\def\do#1{\csdef{#1b}{\textbf{#1}}}
+\docsvlist{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,q,r,t,u,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+% \pb is already defined (by the physics package) as a 2-argument command, denoting the anticommutator or Poisson bracket, e.g. \pb{A,B} yields {A,B}
+% \sb is already defined in the LaTeX kernel. This is a fundamental LaTeX command, DO NOT overwrite it!
+% \vb is already defined (by the physics package) as a 1-argument command, for boldface text, e.g. \vb{A} yields \textbf{A}
+
+% Shortcuts for letters with a tilde on top, e.g. \Atil outputs \widetilde{A}
+\def\do#1{\csdef{#1til}{\widetilde{#1}}}
+\docsvlist{a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z}
+
+\newcommand{\tm}{^{\mathsf{T}}}     % Transpose
+\newcommand{\hm}{^{\mathsf{H}}}     % Conjugate transpose (Hermitian conjugate)
+\newcommand{\itm}{^{-\mathsf{T}}}   % Inverse transpose
+\newcommand{\ihm}{^{-\mathsf{H}}}   % Inverse conjugate transpose (Inverse Hermitian conjugate)
+\newcommand{\ex}{\textbf{e}_x}
+\newcommand{\ey}{\textbf{e}_y}
+\newcommand{\ez}{\textbf{e}_z}
+\newcommand{\Aint}{A^\circ}
+\newcommand{\Bint}{B^\circ}
+\newcommand{\limk}{\lim_{k\to\infty}}
+\newcommand{\limm}{\lim_{m\to\infty}}
+\newcommand{\limn}{\lim_{n\to\infty}}
+\newcommand{\limx}[1][a]{\lim_{x\to#1}}
+\newcommand{\limz}[1][{z_0}]{\lim_{z\to#1}}
+\newcommand{\liminfm}{\liminf_{m\to\infty}}
+\newcommand{\limsupm}{\limsup_{m\to\infty}}
+\newcommand{\liminfn}{\liminf_{n\to\infty}}
+\newcommand{\limsupn}{\limsup_{n\to\infty}}
+\newcommand{\sumkn}{\sum_{k=1}^n}
+\newcommand{\sumk}[1][1]{\sum_{k=#1}^\infty}
+\newcommand{\summ}[1][1]{\sum_{m=#1}^\infty}
+\newcommand{\sumn}[1][1]{\sum_{n=#1}^\infty}
+\newcommand{\emp}{\varnothing}
+\newcommand{\exc}{\backslash}
+\newcommand{\sub}{\subseteq}
+\newcommand{\sups}{\supseteq}
+\newcommand{\capp}{\bigcap}
+\newcommand{\cupp}{\bigcup}
+\newcommand{\kupp}{\bigsqcup}
+\newcommand{\cappkn}{\bigcap_{k=1}^n}
+\newcommand{\cuppkn}{\bigcup_{k=1}^n}
+\newcommand{\kuppkn}{\bigsqcup_{k=1}^n}
+\newcommand{\cappk}[1][1]{\bigcap_{k=#1}^\infty}
+\newcommand{\cuppk}[1][1]{\bigcup_{k=#1}^\infty}
+\newcommand{\cappm}[1][1]{\bigcap_{m=#1}^\infty}
+\newcommand{\cuppm}[1][1]{\bigcup_{m=#1}^\infty}
+\newcommand{\cappn}[1][1]{\bigcap_{n=#1}^\infty}
+\newcommand{\cuppn}[1][1]{\bigcup_{n=#1}^\infty}
+\newcommand{\kuppk}[1][1]{\bigsqcup_{k=#1}^\infty}
+\newcommand{\kuppm}[1][1]{\bigsqcup_{m=#1}^\infty}
+\newcommand{\kuppn}[1][1]{\bigsqcup_{n=#1}^\infty}
+\newcommand{\cappa}{\bigcap_{\alpha\in I}}
+\newcommand{\cuppa}{\bigcup_{\alpha\in I}}
+\newcommand{\kuppa}{\bigsqcup_{\alpha\in I}}
+\newcommand{\dx}{\,dx}
+\newcommand{\dy}{\,dy}
+\newcommand{\dt}{\,dt}
+\newcommand{\dmu}{\,d\mu}
+\newcommand{\dnu}{\,d\nu}
+\DeclareMathOperator{\glb}{\text{glb}}
+\DeclareMathOperator{\lub}{\text{lub}}
+\newcommand{\xh}{\widehat{x}}
+\newcommand{\yh}{\widehat{y}}
+\newcommand{\zh}{\widehat{z}}
+\newcommand{\<}{\langle}
+\renewcommand{\>}{\rangle}
+
+% Shortcuts for inverse hyperbolic functions (and other operators with the same structure)
+\def\do#1{\csdef{#1}{\trigbraces{\operatorname{#1}}}}
+\docsvlist{
+    asinh,acosh,atanh,acoth,asech,acsch,
+    arsinh,arcosh,artanh,arcoth,arsech,arcsch,
+    arcsinh,arccosh,arctanh,arccoth,arcsech,arccsch,
+    sen,tg,cth,senh,tgh,ctgh,
+    Re,Im,arg,Arg,im,ker
+}
+
+% \spn has to be defined separately as the syntax "spn" is different from the output "span"
+% \span is already defined in the LaTeX kernel. This is a fundamental LaTeX command, DO NOT overwrite it!
+\newcommand{\spn}{\trigbraces{\operatorname{span}}}
+
+\makeatletter
+% Redefining the commands \iff (given by LaTeX), \implies and \impliedby (given by amsmath)
+% Math mode is automatically enforced, starred version makes the arrows shorter
+\renewcommand{\impliedby}{\@ifstar{\ensuremath{\Longleftarrow}}{\ensuremath{\Leftarrow}}} % Corresponding Unicode character: U+21D0 ⇐
+\renewcommand{\implies}{\@ifstar{\ensuremath{\Longrightarrow}}{\ensuremath{\Rightarrow}}} % Corresponding Unicode character: U+21D2 ⇒
+\renewcommand{\iff}{\@ifstar{\ensuremath{\Longleftrightarrow}}{\ensuremath{\Leftrightarrow}}} % Corresponding Unicode character: U+21D4 ⇔
+\makeatother
+
+\newtheoremstyle{mystyle}{}{}{}{}{\sffamily\bfseries}{.}{ }{}
+\makeatletter
+\renewenvironment{proof}[1][\proofname] {\par\pushQED{\qed}
+\renewcommand*{\proofname}{Soluzione}
+{\normalfont\sffamily\bfseries\topsep6\p@\@plus6\p@\relax #1\@addpunct{.} }}{\popQED\endtrivlist\@endpefalse}
+\makeatother
+\renewcommand{\qedsymbol}{\coolqed{0.32}} % Implements the new QED symbol
+\theoremstyle{mystyle}{\newtheorem*{remark}{Nota}}
+\theoremstyle{mystyle}{\newtheorem*{remarks}{Note}}
+\theoremstyle{mystyle}{\newtheorem*{example}{Esempio}}
+\theoremstyle{mystyle}{\newtheorem*{examples}{Esempi}}
+\theoremstyle{definition}{\newtheorem*{exercise}{Exercise}}
+
+% Warning environment
+\newtheoremstyle{warn}{}{}{}{}{\normalfont}{}{ }{}
+\theoremstyle{warn}
+\newtheorem*{warning}{\warningsign{0.2}\relax}
+
+% Symbol for the warning environment, designed to be easily scalable
+\newcommand{\warningsign}[1]{
+    \tikz[scale=#1,every node/.style={transform shape}]{
+        \draw[-,line width={#1*0.8mm},red,fill=yellow,rounded corners={#1*2.5mm}] (0,0)--(1,{-sqrt(3)})--(-1,{-sqrt(3)})--cycle;
+        \node at (0,-1) {\fontsize{48}{60}\selectfont\bfseries!};
+}}
+
+\newcommand{\coolqed}[1]{\includegraphics[width=#1cm]{moai.png}} % QED symbol
+
+% verbbox environment, for showing verbatim text next to code output (for package documentation and user learning purposes)
+\NewTCBListing{verbbox}{ !O{} }{boxrule=1pt,sidebyside,skin=bicolor,colback=gray!10,colbacklower=white,valign=center,top=2pt,bottom=2pt,left=2pt,right=2pt,#1} % Last argument allows more tcolorbox options to be added
+
+\NewDocumentCommand{\solidball}{ s O{} m O{white} m }{
+\tikz[scale=#5,every node/.style={transform shape}]{
+    \shade[ball color=#3] (0,0) circle (0.5); %solid ball with no label
+    \IfBooleanF{#1}{
+        \clip (0,0) circle (0.25);
+        \shade[ball color=#4] (0,0) circle (0.5);
+    }
+    \node[font=\sffamily\bfseries\selectfont] at (0,0) {#2}; % Label
+}
+}
+
+\NewDocumentCommand{\stripedball}{ s O{} m O{white} m }{
+\tikz[scale=#5,every node/.style={transform shape}]{
+    \shade[ball color=#4] (0,0) circle (0.5);
+    \clip (-0.5,-0.35) rectangle (0.5,0.35);
+    \shade[ball color=#3] (0,0) circle (0.5);
+    \IfBooleanF{#1}{
+        \clip (0,0) circle (0.25);
+        \shade[ball color=#4] (0,0) circle (0.5);
+    }
+    \node[font=\sffamily\bfseries\selectfont] at (0,0) {#2}; % Label
+}
+}
+
+% Official colors for Aramith Tournament pool balls
+% Colors taken from https://www.aramith.com/story-behind-aramith-tournament-black-colours
+\definecolor{aramith_color_0}{HTML}{FFFFDF} % Cue ball and secondary color for all balls
+\definecolor{aramith_color_1}{HTML}{FFD501} % 1 and 9
+\definecolor{aramith_color_2}{HTML}{013CB1} % 2 and 10
+\definecolor{aramith_color_3}{HTML}{E71C01} % 3 and 11
+\definecolor{aramith_color_4}{HTML}{4F029C} % 4 and 12
+\definecolor{aramith_color_5}{HTML}{FA4D00} % 5 and 13
+\definecolor{aramith_color_6}{HTML}{0E5D01} % 6 and 14
+\definecolor{aramith_color_7}{HTML}{6D071A} % 7 and 15
+\definecolor{aramith_color_8}{HTML}{000000} % 8 (black)
+
+
+\makeatletter
+% Adapted from https://tex.stackexchange.com/a/61600
+\csdef{aramith_pool_ball@0}#1{\solidball*{aramith_color_0}{#1}}                         % Cue ball
+\csdef{aramith_pool_ball@1}#1{\solidball[1]{aramith_color_1}[aramith_color_0]{#1}}      % Ball 1
+\csdef{aramith_pool_ball@2}#1{\solidball[2]{aramith_color_2}[aramith_color_0]{#1}}      % Ball 2
+\csdef{aramith_pool_ball@3}#1{\solidball[3]{aramith_color_3}[aramith_color_0]{#1}}      % Ball 3
+\csdef{aramith_pool_ball@4}#1{\solidball[4]{aramith_color_4}[aramith_color_0]{#1}}      % Ball 4
+\csdef{aramith_pool_ball@5}#1{\solidball[5]{aramith_color_5}[aramith_color_0]{#1}}      % Ball 5
+\csdef{aramith_pool_ball@6}#1{\solidball[6]{aramith_color_6}[aramith_color_0]{#1}}      % Ball 6
+\csdef{aramith_pool_ball@7}#1{\solidball[7]{aramith_color_7}[aramith_color_0]{#1}}      % Ball 7
+\csdef{aramith_pool_ball@8}#1{\solidball[8]{aramith_color_8}[aramith_color_0]{#1}}      % Ball 8 (black)
+\csdef{aramith_pool_ball@9}#1{\stripedball[9]{aramith_color_1}[aramith_color_0]{#1}}    % Ball 9
+\csdef{aramith_pool_ball@10}#1{\stripedball[10]{aramith_color_2}[aramith_color_0]{#1}}  % Ball 10
+\csdef{aramith_pool_ball@11}#1{\stripedball[11]{aramith_color_3}[aramith_color_0]{#1}}  % Ball 11
+\csdef{aramith_pool_ball@12}#1{\stripedball[12]{aramith_color_4}[aramith_color_0]{#1}}  % Ball 12
+\csdef{aramith_pool_ball@13}#1{\stripedball[13]{aramith_color_5}[aramith_color_0]{#1}}  % Ball 13
+\csdef{aramith_pool_ball@14}#1{\stripedball[14]{aramith_color_6}[aramith_color_0]{#1}}  % Ball 14
+\csdef{aramith_pool_ball@15}#1{\stripedball[15]{aramith_color_7}[aramith_color_0]{#1}}  % Ball 15
+\NewDocumentCommand{\poolball}{ o m m }{
+    \pgfmathparse{Mod(#2,16)} % Argument #2 mod 16  as a floating-point number, e.g. 4.0
+    \pgfmathtruncatemacro{\argumentmodulosixteen}{\pgfmathresult} % Convert to integer, e.g. 4.0 to 4
+    \ifnum\argumentmodulosixteen=0
+        \solidball*{aramith_color_0}{#3}
+    \else
+        \ifnum\argumentmodulosixteen<9
+            \solidball[\IfNoValueTF{#1}{#2}{#1}]{aramith_color_\argumentmodulosixteen}[aramith_color_0]{#3} % Solid ball of the appropriate color, and the appropriate number (if the optional argument is not specified), otherwise the optional argument
+        \else
+            \pgfmathparse{\argumentmodulosixteen-8} % Argument #2 mod 8  as a floating-point number, e.g. 3.0 (this will only be computed if #2≥9)
+            \pgfmathtruncatemacro{\argumentmoduloeight}{\pgfmathresult} % Convert to integer, e.g. 3.0 to 3
+            \stripedball[\IfNoValueTF{#1}{#2}{#1}]{aramith_color_\argumentmoduloeight}[aramith_color_0]{#3} % Striped ball of the appropriate color, and the appropriate number (if the optional argument is not specified), otherwise the optional argument
+        \fi
+    \fi}
+\makeatother
+
+\makeatletter
+% \fsize stores the current font size but is expandable (and can be called later without using \makeatletter and \makeatother)
+\def\fsize{\dimexpr\f@size pt\relax}
+\makeatother
+
+\makeatletter
+% Adapted from https://tex.stackexchange.com/a/19700
+\def\my@vector #1,#2\@eolst{
+    \ifx\relax#2\relax
+        #1
+    \else
+        #1\my@delim
+        \my@vector #2\@eolst
+    \fi}
+\newcommand\vcstring[2][\\]{% Converts comma-separated string to #1-separated string
+    \def\my@delim{#1}
+        \my@vector #2,\relax\noexpand\@eolst}
+\newcommand\cvc[2][p]{% Converts comma-separated string to column vector, optional argument defines matrix brackets
+    \def\my@delim{\\}
+        \begin{#1matrix} % Empty argument also possible
+            \my@vector #2,\relax\noexpand\@eolst
+        \end{#1matrix}}
+\newcommand\rvc[2][p]{% Converts comma-separated string to row vector, optional argument defines matrix brackets
+    \def\my@delim{&}
+        \begin{#1matrix} % Empty argument also possible
+            \my@vector #2,\relax\noexpand\@eolst
+        \end{#1matrix}}
+% Matrix environment with variable number of arguments. Adapted from https://davidyat.es/2016/07/27/writing-a-latex-macro-that-takes-a-variable-number-of-arguments/
+\newcommand{\mat}[2][p]{
+    \def\matrixenvironment{#1matrix} % Specifying the matrix brackets, this has to be done beforehand as '#1' changes under \passtonextarg
+    \def\my@delim{&}
+        \begin{\matrixenvironment} % Begin matrix environment
+            \my@vector #2,\relax\noexpand\@eolst
+            \@ifnextchar\bgroup{\passtonextarg}{\end{\matrixenvironment}}% % Pass to next argument (if any), otherwise end matrix environment
+}
+\newcommand{\passtonextarg}[1]{\\ \my@vector #1,\relax\noexpand\@eolst
+    \@ifnextchar\bgroup{\passtonextarg}{\end{\matrixenvironment}}% Passing to next argument
+}
+\makeatother
+
+\definecolor{tcol_DEF}{HTML}{E40125} % Color for Definition
+\definecolor{tcol_PRP}{HTML}{EB8407} % Color for Proposition
+\definecolor{tcol_LEM}{HTML}{05C4D9} % Color for Lemma
+\definecolor{tcol_THM}{HTML}{1346E4} % Color for Theorem
+\definecolor{tcol_COR}{HTML}{7904C2} % Color for Corollary
+\definecolor{tcol_REM}{HTML}{18B640} % Color for Remark
+\definecolor{tcol_PRF}{HTML}{5A76B2} % Color for Proof
+\definecolor{tcol_EXA}{HTML}{21340A} % Color for Example
+
+\tcbset{
+tbox_DEF_style/.style={enhanced jigsaw,
+    colback=tcol_DEF!10,colframe=tcol_DEF!80!black,,
+    fonttitle=\sffamily\bfseries,
+    separator sign=.,label separator={},
+    sharp corners,top=2pt,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_PRP_style/.style={enhanced jigsaw,
+    colback=tcol_PRP!10,colframe=tcol_PRP!80!black,
+    fonttitle=\sffamily\bfseries,
+    attach boxed title to top left={yshift=-\tcboxedtitleheight},
+    boxed title style={
+        boxrule=0pt,boxsep=2.5pt,
+        colback=tcol_PRP!80!black,colframe=tcol_PRP!80!black,
+        sharp corners=uphill
+    },
+    separator sign=.,label separator={},
+    top=\tcboxedtitleheight,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,drop fuzzy shadow,breakable
+},
+tbox_THM_style/.style={enhanced jigsaw,
+    colback=tcol_THM!10,colframe=tcol_THM!80!black,
+    fonttitle=\sffamily\bfseries,coltitle=black,
+    attach boxed title to top left={xshift=10pt,yshift=-\tcboxedtitleheight/2},
+    boxed title style={
+        colback=tcol_THM!10,colframe=tcol_THM!80!black,height=16pt,bean arc
+    },
+    separator sign=.,label separator={},
+    sharp corners,top=6pt,bottom=2pt,left=2pt,right=2pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_LEM_style/.style={enhanced jigsaw,
+    colback=tcol_LEM!10,colframe=tcol_LEM!80!black,
+    boxrule=0pt,
+    fonttitle=\sffamily\bfseries,
+    attach boxed title to top left={yshift=-\tcboxedtitleheight},
+    boxed title style={
+        boxrule=0pt,boxsep=2pt,
+        colback=tcol_LEM!80!black,colframe=tcol_LEM!80!black,
+        interior code={\fill[tcol_LEM!80!black] (interior.north west)--(interior.south west)--([xshift=-2mm]interior.south east)--([xshift=2mm]interior.north east)--cycle;
+    }},
+    separator sign=.,label separator={},
+    frame hidden,borderline north={1pt}{0pt}{tcol_LEM!80!black},
+    before upper={\hspace{\tcboxedtitlewidth}},
+    sharp corners,top=2pt,bottom=2pt,left=5pt,right=5pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+tbox_COR_style/.style={enhanced jigsaw,
+    colback=tcol_COR!10,colframe=tcol_COR!80!black,
+    boxrule=0pt,
+    fonttitle=\sffamily\bfseries,coltitle=black,
+    separator sign={},label separator={},
+    description font=\normalfont\sffamily,
+    description delimiters={(}{)},
+    attach title to upper,after title={.\ },
+    frame hidden,borderline west={2pt}{0pt}{tcol_COR},
+    sharp corners,top=2pt,bottom=2pt,left=5pt,right=5pt,
+    before skip=10pt,after skip=10pt,breakable
+},
+}
+
+\newtcbtheorem[number within=section, list inside={temi},
+    crefname={\color{tcol_DEF!50!black} definition}{\color{tcol_DEF!50!black} definitions},
+    Crefname={\color{tcol_DEF!50!black} Definition}{\color{tcol_DEF!50!black} Definitions}
+    ]{definition}{Tema}{tbox_DEF_style}{temi}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_PRP!50!black} proposition}{\color{tcol_PRP!50!black} propositions},
+    Crefname={\color{tcol_PRP!50!black} Proposition}{\color{tcol_PRP!50!black} Propositions}
+    ]{proposition}{Proposition}{tbox_PRP_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_THM!50!black} theorem}{\color{tcol_THM!50!black} theorems},
+    Crefname={\color{tcol_THM!50!black} Theorem}{\color{tcol_THM!50!black} Theorems}
+    ]{theorem}{Theorem}{tbox_THM_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_LEM!50!black} lemma}{\color{tcol_LEM!50!black} lemmas},
+    Crefname={\color{tcol_LEM!50!black} Lemma}{\color{tcol_LEM!50!black} Lemmas}
+    ]{lemma}{Lemma}{tbox_LEM_style}{}
+\newtcbtheorem[use counter from=definition,
+    crefname={\color{tcol_COR!50!black} corollary}{\color{tcol_COR!50!black} corollaries},
+    Crefname={\color{tcol_COR!50!black} Corollary}{\color{tcol_COR!50!black} Corollaries}
+    ]{corollary}{Corollary}{tbox_COR_style}{}
+
+\makeatletter
+\@namedef{tcolorboxshape@filingbox@ul}#1#2#3{
+    (frame.south west)--(title.north west)--([xshift=-\dimexpr#1\relax]title.north east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@uc}#1#2#3{
+    (frame.south west)--(frame.north west)--([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west) to[out=0,in=180] ([xshift=\dimexpr#1\relax]title.north west)--([xshift=-\dimexpr#1\relax]title.north east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@ur}#1#2#3{
+    (frame.south east)--(title.north east)--([xshift=\dimexpr#1\relax]title.north west) to[out=180,in=0] ([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west)--(frame.north west)--(frame.south west)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@dl}#1#2#3{
+    (frame.north west)--(title.south west)--([xshift=-\dimexpr#1\relax]title.south east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@dc}#1#2#3{
+    (frame.north west)--(frame.south west)--([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west) to[out=0,in=180] ([xshift=\dimexpr#1\relax]title.south west)--([xshift=-\dimexpr#1\relax]title.south east) to[out=0,in=180] ([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@filingbox@dr}#1#2#3{
+    (frame.north east)--(title.south east)--([xshift=\dimexpr#1\relax]title.south west) to[out=180,in=0] ([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west)--(frame.south west)--(frame.north west)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@ul}#1#2#3{
+    (frame.south west)--(title.north west)--([xshift=-\dimexpr#1\relax]title.north east)--([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@uc}#1#2#3{
+    (frame.south west)--(frame.north west)--([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west)--([xshift=\dimexpr#1\relax]title.north west)--([xshift=-\dimexpr#1\relax]title.north east)--([xshift=\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south east)--(frame.north east)--(frame.south east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@ur}#1#2#3{
+    (frame.south east)--(title.north east)--([xshift=\dimexpr#1\relax]title.north west)--([xshift=-\dimexpr#2\relax,yshift=\dimexpr#3\relax]title.south west)--(frame.north west)--(frame.south west)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@dl}#1#2#3{
+    (frame.north west)--(title.south west)--([xshift=-\dimexpr#1\relax]title.south east)--([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@dc}#1#2#3{
+    (frame.north west)--(frame.south west)--([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west)--([xshift=\dimexpr#1\relax]title.south west)--([xshift=-\dimexpr#1\relax]title.south east)--([xshift=\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north east)--(frame.south east)--(frame.north east)--cycle
+}
+\@namedef{tcolorboxshape@railingbox@dr}#1#2#3{
+    (frame.north east)--(title.south east)--([xshift=\dimexpr#1\relax]title.south west)--([xshift=-\dimexpr#2\relax,yshift=-\dimexpr#3\relax]title.north west)--(frame.south west)--(frame.north west)--cycle
+}
+\newcommand{\TColorBoxShape}[2]{\expandafter\ifx\csname tcolorboxshape@#1@#2\endcsname\relax
+\expandafter\@gobble\else
+\csname tcolorboxshape@#1@#2\expandafter\endcsname
+\fi}
+\makeatother
+
+\tcbset{ % Styles for filingbox, railingbox and flagbox environments
+% Adapted from https://tex.stackexchange.com/questions/587912/tcolorbox-custom-title-box-style
+filingstyle/ul/.style 2 args={
+    attach boxed title to top left={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{ul}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{ul}{9pt}{18pt}{6pt};
+    }},
+filingstyle/uc/.style 2 args={
+    attach boxed title to top center={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{uc}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{uc}{9pt}{18pt}{6pt};
+    }},
+filingstyle/ur/.style 2 args={
+    attach boxed title to top right={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{ur}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{ur}{9pt}{18pt}{6pt};
+    }},
+filingstyle/dl/.style 2 args={
+    attach boxed title to bottom left={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{dl}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{dl}{9pt}{18pt}{6pt};
+    }},
+filingstyle/dc/.style 2 args={
+    attach boxed title to bottom center={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{dc}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{dc}{9pt}{18pt}{6pt};
+    }},
+filingstyle/dr/.style 2 args={
+    attach boxed title to bottom right={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1,rounded corners] \TColorBoxShape{filingbox}{dr}{9pt}{18pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm,rounded corners] \TColorBoxShape{filingbox}{dr}{9pt}{18pt}{6pt};
+    }},
+railingstyle/ul/.style 2 args={
+    attach boxed title to top left={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{ul}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{ul}{3pt}{12pt}{6pt};
+    }},
+railingstyle/uc/.style 2 args={
+    attach boxed title to top center={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{uc}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{uc}{3pt}{12pt}{6pt};
+    }},
+railingstyle/ur/.style 2 args={
+    attach boxed title to top right={yshift=-2mm},
+    boxed title style={empty,top=0mm,bottom=1mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{ur}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{ur}{3pt}{12pt}{6pt};
+    }},
+railingstyle/dl/.style 2 args={
+    attach boxed title to bottom left={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=1mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{dl}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{dl}{3pt}{12pt}{6pt};
+    }},
+railingstyle/dc/.style 2 args={
+    attach boxed title to bottom center={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=0mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{dc}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{dc}{3pt}{12pt}{6pt};
+    }},
+railingstyle/dr/.style 2 args={
+    attach boxed title to bottom right={yshift=2mm},
+    boxed title style={empty,top=1mm,bottom=0mm,left=0mm,right=1mm},
+    interior code={
+        \path[fill=#1] \TColorBoxShape{railingbox}{dr}{3pt}{12pt}{6pt};
+    },
+    frame code={
+        \path[draw=#2,line width=0.5mm] \TColorBoxShape{railingbox}{dr}{3pt}{12pt}{6pt};
+    }},
+flagstyle/ul/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline west={1pt}{0pt}{#2},
+    attach boxed title to top left={yshift=-8pt,yshifttext=-8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    bottom=0mm
+    },
+flagstyle/ur/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline east={1pt}{0pt}{#2},
+    attach boxed title to top right={yshift=-8pt,yshifttext=-8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    bottom=0mm
+    },
+flagstyle/dl/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline west={1pt}{0pt}{#2},
+    attach boxed title to bottom left={yshift=8pt,yshifttext=8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    top=0mm
+    },
+flagstyle/dr/.style 2 args={
+    interior hidden,frame hidden,colbacktitle=#1,
+    borderline east={1pt}{0pt}{#2},
+    attach boxed title to bottom right={yshift=8pt,yshifttext=8pt},
+    boxed title style={boxsep=3pt,boxrule=1pt,colframe=#2,sharp corners,left=4pt,right=4pt},
+    top=0mm
+    }
+}
+
+% Box in the shape of a filing divider, position of tab can be ul (up left), uc (up center), ur (up right), dl (down left), dc (down center) or dr (down right). Default is ul (upper left)
+\NewTColorBox{filingbox}{ D(){ul} O{black} m O{} }{enhanced,
+    top=1mm,bottom=1mm,left=1mm,right=1mm,
+    title={#3},
+    fonttitle=\sffamily\bfseries,
+    coltitle=black,
+    filingstyle/#1={#2!10}{#2},
+    #4
+}
+
+% Box in the shape of a railing bar, position of tab can be ul (up left), uc (up center), ur (up right), dl (down left), dc (down center) or dr (down right). Default is ul (upper left)
+\NewTColorBox{railingbox}{ D(){ul} O{black} m O{} }{enhanced,
+    top=1mm,bottom=1mm,left=1mm,right=1mm,
+    title={#3},
+    fonttitle=\sffamily\bfseries,
+    coltitle=black,
+    railingstyle/#1={#2!10}{#2},
+    #4
+}
+
+% Box in the shape of a flag, position of tab can be ul (up left), ur (up right), dl (down left) or dr (down right). Default is ul (upper left)
+\NewTColorBox{flagbox}{ D(){ul} O{black} m O{} }{enhanced,breakable,
+    top=1mm,bottom=1mm,left=1mm,right=1mm,
+    title={#3},
+    fonttitle=\sffamily\bfseries,
+    coltitle=black,
+    flagstyle/#1={#2!10}{#2},
+    #4
+}
+
+\makeatletter
+\newcommand*{\CreateSmartLargeOperator}[2]{
+% Adapted from https://tex.stackexchange.com/questions/61598/new-command-with-cases-conditionals-if-thens/61600
+    % Plain operator (no customization)
+    \csdef{LargeOperator@#1@}{\csdef{LargeOperator@#1@Symbol}{\csuse{#1}}}
+    % Operator with limits above and below symbol
+    \csdef{LargeOperator@#1@l}{\csdef{LargeOperator@#1@Symbol}{\csuse{#1}\limits}}
+    % Operato with limits beside symbol
+    \csdef{LargeOperator@#1@n}{\csdef{LargeOperator@#1@Symbol}{\csuse{#1}\nolimits}}
+    % Inline style operator
+    \csdef{LargeOperator@#1@i}{\csdef{LargeOperator@#1@Symbol}{\textstyle\csuse{#1}}}
+    % Display style operator
+    \csdef{LargeOperator@#1@d}{\csdef{LargeOperator@#1@Symbol}{\displaystyle\csuse{#1}}}
+    % Inline style operator with limits above and below symbol
+    \csdef{LargeOperator@#1@il}{\csdef{LargeOperator@#1@Symbol}{\textstyle\csuse{#1}\limits}}
+    % Inline style operator with limits beside symbol
+    \csdef{LargeOperator@#1@in}{\csdef{LargeOperator@#1@Symbol}{\textstyle\csuse{#1}\nolimits}}
+    % Display style operator with limits above and below symbol
+    \csdef{LargeOperator@#1@dl}{\csdef{LargeOperator@#1@Symbol}{\displaystyle\csuse{#1}\limits}}
+    % Display style operator with limits beside symbol
+    \csdef{LargeOperator@#1@dn}{\csdef{LargeOperator@#1@Symbol}{\displaystyle\csuse{#1}\nolimits}}
+
+% NOTE: In the command below, ##1 denotes the operator. It is NOT to be used as an argument!
+\def\LargeOperatorSpecs@i##1,##2,##3,##4,##5,##6,##7\@nil{
+% If no arguments, operate over n from 1 to infinity
+    \ifx$##2$\csuse{LargeOperator@##1@Symbol}_{n=1}^{\infty}\else
+    % If one argument, operate over n from ##2 to infinity
+        \ifx$##3$\csuse{LargeOperator@##1@Symbol}_{n=##2}^{\infty}\else
+        % If two arguments, operate over n from ##2 to ##3
+            \ifx$##4$\csuse{LargeOperator@##1@Symbol}_{n=##2}^{##3}\else
+            % If three arguments, operate over ##2 from ##3 to ##4
+                \ifx$##5$\csuse{LargeOperator@##1@Symbol}_{##2=##3}^{##4}\else
+                % If four arguments, operate over ##2 and ##3 from ##4 to ##5
+                    \ifx$##6$\csuse{LargeOperator@##1@Symbol}_{##2,##3=##4}^{##5}\else
+                    % If five arguments, operate over ##2, ##3 and ##4 from ##5 to ##6
+                        \csuse{LargeOperator@##1@Symbol}_{##2,##3,##4=##5}^{##6}
+                    \fi
+                \fi
+            \fi
+        \fi
+    \fi
+}
+
+% Flexible "smart" large operator macro with comma-separated arguments and optional argument for formatting. Default is over n from 1 to infinity. Adapted from https://tex.stackexchange.com/a/15722
+\expandafter\DeclareDocumentCommand\csname#2\endcsname{ O{} m }{ % New operator macro
+\bgroup % Group created to keep operator style (e.g. \limits) local
+    \expandafter\ifx\csname LargeOperator@#1@##1\endcsname\relax
+    \expandafter\@gobble\else
+    \csname LargeOperator@#1@##1\expandafter\endcsname
+    \fi
+    \expandafter\LargeOperatorSpecs@i#1,##2,,,,,\@nil% % #1 stands in for the first "argument" of \LargeOperatorSpecs@i (the operator), the actual arguments are from ##2 onward
+\egroup}
+}
+\makeatother
+
+% Create the smart large operator #2 based on the large operator #1. For example, \CreateSmartLargeOperator{sum}{Sum} will define \Sum as the smart large operator based on \sum
+% Equivalent Unicode characters are given here (but they are NOT the same as the operators)
+\CreateSmartLargeOperator{sum}{Sum}             % Large: U+2211 ∑ (no small version)
+\CreateSmartLargeOperator{prod}{Prod}           % Small: U+2293 ⊓, Large: U+220F ∏
+\CreateSmartLargeOperator{coprod}{Coprod}       % Small: U+2294 ⊔, Large: U+2210 ∐
+\CreateSmartLargeOperator{bigcap}{Capp}         % Small: U+2229 ∩, Large: U+22C2 ⋂
+\CreateSmartLargeOperator{bigcup}{Cupp}         % Small: U+222A ∪, Large: U+22C3 ⋃
+\CreateSmartLargeOperator{bigsqcup}{Kupp}       % Small: U+2294 ⊔, Large: U+2210 ∐
+\CreateSmartLargeOperator{bigodot}{Odot}        % Small: U+2299 ⊙ (no large version)
+\CreateSmartLargeOperator{bigoplus}{Oplus}      % Small: U+2295 ⊕ (no large version)
+\CreateSmartLargeOperator{bigotimes}{Otimes}    % Small: U+2297 ⊗ (no large version)
+\CreateSmartLargeOperator{biguplus}{Uplus}      % Small: U+228E ⊎ (no large version)
+\CreateSmartLargeOperator{bigwedge}{Wedge}      % Small: U+2227 ∧, Large: U+22C0 ⋀
+\CreateSmartLargeOperator{bigvee}{Vee}          % Small: U+2228 ∨, Large: U+22C1 ⋁
+
+\tcolorboxenvironment{proof}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_PRF},left=8pt,right=8pt,sharp corners,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{remark}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_REM},left=8pt,right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{remarks}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_REM},left=8pt,right=8pt,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{example}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_EXA},left=8pt,right=8pt,sharp corners,
+    before skip=10pt,after skip=10pt,breakable
+}
+\tcolorboxenvironment{examples}{boxrule=0pt,boxsep=0pt,blanker,
+    borderline west={2pt}{0pt}{tcol_EXA},left=8pt,right=8pt,sharp corners,
+    before skip=10pt,after skip=10pt,breakable
+}
+
+% align and align* environments with inline size
+\newenvironment{talign}{\let\displaystyle\textstyle\align}{\endalign}
+\newenvironment{talign*}{\let\displaystyle\textstyle\csname align*\endcsname}{\endalign}
+
+\usepackage[explicit]{titlesec}
+% Setting the format for sections, subsections and subsubsections
+\titleformat{\section}{\fontsize{24}{30}\sffamily\bfseries}{\thesection}{20pt}{#1}
+\titleformat{\subsection}{\fontsize{16}{18}\sffamily\bfseries}{\thesubsection}{12pt}{#1}
+\titleformat{\subsubsection}{\fontsize{10}{12}\sffamily\large\bfseries}{\thesubsubsection}{8pt}{#1}
+% Setting the spacing for sections, subsections and subsubsections
+% First argument is the left indent, second argument is the spacing above, third argument is the spacing below
+\titlespacing*{\section}{0pt}{5pt}{5pt}
+\titlespacing*{\subsection}{0pt}{5pt}{5pt}
+\titlespacing*{\subsubsection}{0pt}{5pt}{5pt}
+
+\newcommand{\Disp}{\displaystyle}
+\newcommand{\qe}{\hfill\(\bigtriangledown\)}
+\DeclareMathAlphabet\mathbfcal{OMS}{cmsy}{b}{n}
+\setlength{\parindent}{0.2in}
+\setlength{\parskip}{0pt}
+\setlength{\columnseprule}{0pt}
+
+\makeatletter
+% Modify spacing above and below display equations
+\g@addto@macro\normalsize{
+    \setlength\abovedisplayskip{3pt}
+    \setlength\belowdisplayskip{3pt}
+    \setlength\abovedisplayshortskip{0pt}
+    \setlength\belowdisplayshortskip{0pt}
+}
+\makeatother
+
+\makeatletter
+% Redefining the title block
+\renewcommand\maketitle{
+\null % \vspace does not work with nothing above it, so \null is added
+\vspace{5mm}
+\begingroup % Creating a group to ensure col_stripes is only defined locally, i.e. only for the title
+\definecolor{col_stripes}{HTML}{1B0982} % Color of the stripes above and below the title components
+    \begin{tcolorbox}[enhanced,blanker,
+    borderline horizontal={2pt}{0pt}{col_stripes},
+    borderline horizontal={1pt}{-3.5pt}{col_stripes},
+    borderline horizontal={2pt}{-8pt}{col_stripes},
+    fontupper=\fontfamily{bch},
+    halign=flush center,top=10mm,bottom=10mm,after skip=20mm,
+    ]
+        {\fontsize{24}{28}\bfseries\selectfont\@title}\\
+            \vspace{6mm}
+        {\fontsize{20}{24}\selectfont\@author}\\
+            \vspace{6mm}
+        {\fontsize{16}{20}\selectfont\@date}
+    \end{tcolorbox}
+\endgroup}
+% Adapted from https://tex.stackexchange.com/questions/483953/how-to-add-new-macros-like-author-without-editing-latex-ltx?noredirect=1&lq=1
+\makeatother
+
+\title{Cose da sapere per l'esame di Fondamenti di informatica\\\large{Basato su su un'analisi personale dei vecchi compiti e su opinioni personali (di un informatico vero, NON ingegniere)}}
+\author{Black cat}
+\date{\today} % Replace with \today to show the current date
+
+% Based on 'Fun Template 1', available at https://www.overleaf.com/latex/templates/fun-template-1/drwvdzsrpgzz
+
+\begin{document}
+
+\maketitle
+
+\definecolor{tcol_CNT1}{HTML}{72E094} % First color for Contents
+\definecolor{tcol_CNT2}{HTML}{72E094} % Second color for Contents
+\definecolor{tcol_CNV1}{HTML}{8E44AD} % First color for Conventions
+\definecolor{tcol_CNV2}{HTML}{A10B49} % First color for Conventions
+
+\begin{tcolorbox}[enhanced,
+    title = Indice degli argomenti,
+    fonttitle=\fontsize{20}{24}\sffamily\bfseries\selectfont,
+    coltitle=black,
+    fontupper=\sffamily,
+    interior style={left color=tcol_CNT1!80,right color=tcol_CNT2!80},
+    frame style={left color=tcol_CNT1!60!black,right color=tcol_CNT2!60!black},
+    attach boxed title to top center={yshift=10pt},
+    boxed title style={frame hidden,
+        interior style={left color=tcol_CNT1,right color=tcol_CNT2},
+        frame style={left color=tcol_CNT1!60!black,right color=tcol_CNT2!60!black},
+        height=24pt,bean arc,drop fuzzy shadow
+    },
+    top=2mm,bottom=2mm,left=2mm,right=2mm,
+    before skip=20mm,after skip=20mm,
+    drop fuzzy shadow,breakable]
+%
+\makeatletter
+\@starttoc{toc}
+\makeatother
+\end{tcolorbox}
+\newpage
+\setcounter{section}{-1}
+\tcblistof[\section]{temi}{Lista riassuntiva di tutto}
+
+\newpage
+\section{Comandi da sapere per forza}
+Di seguito sono riportati i comandi che sono presenti nella stragrande maggioranza degli esercizi proposti e senza i quali è praticamente impossibile passare l'esame:
+
+\subsection{Operazioni}
+\begin{definition}{Operazioni di base}{}
+Date due variabili \pyth{a,b = 0,0} come eseguire le operazioni di base fra loro (addizione, sottrazione, moltiplicazione, divisione)
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+    \item Addizione: \pyth{c = a+b}
+    \item Sottrazione: \pyth{c = a-b}
+    \item Moltiplicazione: \pyth{c = a*b}
+    \item Divisione: \pyth{c = a/b}
+\end{enumerate}
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate} 
+    \item \textbf{La spaziatura} nelle operazioni è abbastanza arbitraria \pyth{c = a+b} e \pyth{c = a + b} sono entrambi accettabili
+    \item \textbf{La divisione per 0} porta ad un errore da parte dell'interprete a runtime, ed è uno degli \textbf{edge cases} più comuni che vanno sempre testati quando c'è una divisione.
+    \item Se si vuole assegnare il valore dell'operazione ad una delle variabili che ci concorrono, si può usare \textbf{la forma ridotta (e molto più stilosa e leggibile)} del tipo: \pyth{a += b} che equivale a svolgere \pyth{a = a + b}
+\end{enumerate}
+\end{remarks}
+
+\begin{definition}{Operatori binari e unari}{}
+Date due variabili \pyth{a,b = True, True} come utilizzare gli operatori binari e unari (and, or, not)
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+    \item And: \pyth{c = a and b}
+    \item Or: \pyth{c = a or b}
+    \item Not: \pyth{c = !b} oppure \pyth{c = not b}
+\end{enumerate}
+\end{proof}
+\begin{remark}
+Di solito questi operatori si usano considerando come "variabili" delle valutazioni di verità, es:
+\begin{python}
+x,y = 2,1
+
+if x > y and y == 1
+    do something
+\end{python}
+equivale a svolgere:
+\begin{python}
+x,y = 2,1
+a = x > y
+b = y == 1
+
+if a and b:
+    do something
+\end{python}
+(Per quanto questa seconda forma sia inusuale, il codice funziona effettivamente, provare per credere)
+\end{remark}
+\begin{definition}{Altri operatori utili}{}
+Date due variabili \pyth{a,b = 0,0} come eseguire altri tipi di operazioni fra loro.
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+    \item Elevazione a potenza ($a^b$): \pyth{c = a**b}
+\end{enumerate}
+\end{proof}
+
+\newpage
+\subsection{Liste (e strutture dati monodimensionali in generale)}
+Quello che viene espresso in questa sezione riguarda la liste. Verrà anche data una breve spiegazione di cosa sono i set e i dizionari. Ho visto poco usati questi ultimi due negli esercizi, se non per casi molto specifici. \textbf{Nella sezione delle solutions to common problems}, ci sono le applicazioni principali di set e dizionari (una per ognuno) che al prof. piacciono tanto e che in effetti sono molto carine e si usano anche nella vita reale.
+
+\begin{definition}{Creare una lista}{}
+Come creare una lista di elementi
+\end{definition}
+\begin{proof}
+\pyth{A = []} crea una lista vuota, \pyth{A = [x,y,z] crea una lista con gli elementi x,y,z}
+\end{proof}
+
+\begin{remark}
+Se A \textbf{non} è una lista, non è possibile utilizzare su A i metodi propri delle liste, es:
+\begin{python}
+A = 0
+print(A[0])
+\end{python}
+restituirà errore
+\end{remark}
+
+\begin{definition}{Creare (e utilizzare) altre strutture dati}{}
+Come creare altre strutture dati utili (e utilizzarle) (Set e dizionari)
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+    \item \textbf{Set (insieme)}:
+    \begin{python}
+A = {0, 1, 2}
+    \end{python}
+    crea un set, ovvero un insieme di elementi unici, elementi uguali vengon rimossi e l'ordine non è definito. Non si può accedere ai set con la sintassi \pyth{A[i]}.\\
+    \textbf{Non} ho visto mai necessario un largo utilizzo dei set nei compiti vecchi, in ogni caso alcune informazioni utili sono:
+    \begin{itemize}
+        \item Per aggiungere/rimuovere elementi si usano i metodi \pyth{A.add(elemento)} e \pyth{A.remove(elemento)}
+        \item Si possono eseguire operazioni fra insiemi come: differenza: \pyth{C = A-B}, unione: \pyth{C = A.union(B)}, intersezione: \pyth{C = A.intersection(B)}
+    \end{itemize}
+    \item \textbf{Dizionario}:
+    \begin{python}
+A = {0:"a", 1:"b", 2:"c"}
+    \end{python}
+    crea un dizionario, ovvero un associazione chiave, valore, che permette di cercare un valore al suo interno in base alla chiave. Le chiavi devono essere uniche, mentre i valori no.\\
+    \textbf{Non} ho visto mai necessario un largo utilizzo dei set nei compiti vecchi, in ogni caso alcune informazioni utili sono:
+    \begin{itemize}
+    \item Aggiungere/rimuovere elementi: \pyth{A[chiave] = valore} e \pyth{A.pop(chiave)}
+    \item Restituire tutte le chiavi: \pyth{A.keys()}
+    \item Restituire tutti i valori: \pyth{A.values()}
+    \item Restituire un valore data la chiave: \pyth{A.get(chiave)} oppure \pyth{A[chiave]}
+    \end{itemize}
+\end{enumerate}
+\end{proof}
+\begin{remark}
+Non tutti i comandi presenti nei temi successivi si applicano a set e dizionari, alcuni sì. In generale consiglio di aprire l'IDE (il programma che si usa per scrivere codice) e vedere quali comandi si applicano a degli oggetti di tipo set o dizionario.
+\end{remark}
+
+\begin{definition}{Lunghezza di una lista}{}
+Data una lista di elementi \pyth{A = [x,y,z]} come conoscere la sua lunghezza.
+\end{definition}
+\begin{proof}
+\pyth{len(A)} ritorna la lunghezza di A.
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+    \item len è una funzione built-in di Python e come tale si applica senza usare la sintassi oggetto.funzione(parametro), ma usando solo funzione(parametro).
+    \item Dato che len ritorna la lunghezza di una lista, in generale restirutirà un valore che equivale alla posizione \textbf{successiva} a quella dell'ultimo elemento della lista, dato che una lista di lunghezza n ha elementi che vanno dalla posizione 0 alla posizione n-1.
+\end{enumerate}
+\end{remarks}
+
+\begin{definition}{Accedere alle liste}{}
+Data una lista di elementi \pyth{A = [x,y,z]} come accedere ad un elemento al suo interno.
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+    \item Metodo base: \pyth{A[i]} accede all'elemento i-esimo.
+    \item Accesso dal fondo: \pyth{A[-i]} accede all'elemento i-esimo \textbf{a partire dal fondo}.
+    \item Accesso a più valori alla volta: \pyth{A[i : j]}  accede agli elementi dall'i-esimo al j-esimo.
+\end{enumerate}
+\end{proof}
+\begin{remark}
+\textbf{La prima posizione di una lista} è la posizione 0, mentre \textbf{l'ultima posizione} è la posizione lunghezza-1, quindi il primo elemento sarà \pyth{A[0]}, mentre l'ultimo sarà \pyth{A[len(A)-1]}. (Provare ad accedere ad \pyth{A[len(A)]} darà un errore di out of bounds)
+\end{remark}
+
+\begin{definition}{Aggiungere e rimuovere elementi}{}
+Data una lista di elementi \pyth{A = [x,y,z]} come aggiungere e rimuovere elementi
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+    \item Aggiungere un elemento "elem" in testa: \pyth{A.append(elem)}
+    \item Aggiungere un elemento "elem" ad una posizione "pos": \pyth{A.insert(pos, elem)}
+    \item Rimuovere un elemento ad una posizione "pos": \pyth{A.pop(pos)}
+    \item Rimuovere il primo elemento di valore noto "val" (se esiste): \pyth{A.remove(val)}
+\end{enumerate}
+\end{proof}
+\begin{remark}
+Il metodo pop ritorna l'elemento rimosso, mentre il metodo remove no, per cui un'istruzione del tipo \\\pyth{a = A.pop(pos)} assegnerà ad a il valore contenuto in \pyth{A[pos]}, mentre \pyth{a = A.remove(elem)} assegnera ad a il valore "None" (e non ha quindi senso di essere usato così).
+\end{remark}
+
+\newpage
+\subsection{Matrici}
+nella maggior parte degli ultimi compiti c'è sempre un esercizio su una matrice. Solo in pochi c'è effettivamente da creare una matrice m*n, (vedi \ref{m*n}). Nella maggior parte dei casi la matrice è ricevuta come input e va solo scorsa correttamente.
+
+\begin{definition}{Accedere ad una matrice}{}
+Data una matrice di elementi \pyth{A = [[1,2,3],[3,2,1]]}, come accedere ad un elemento al suo interno.
+\end{definition}
+\begin{proof}
+Si usa esattamente la stessa sintassi che per i vettori monodimensionali ma ricordandosi di usare un doppio puntatore, quindi per accedere all'elemento $a_{ij}$ si dovrà accedere ad \pyth{A[i][j]}. Valgono tutti gli accorgimenti espressi per i vettori monodimensionali.
+\end{proof}
+
+\begin{definition}{Aggiungere e rimuovere elementi}{}
+Data una matrice di elementi \pyth{A = [[1,2,3],[3,2,1]]}, come aggiungere e rimuovere elementi
+\end{definition}
+\begin{proof}
+Il metodo più semplice per capire come fare ad aggiungere e rimuovere elementi è quello di vedere una matrice come una lista di liste. Una volta compreso questo si possono usare tutti i metodi che si usano per le liste classiche con le dovute accortezze.\\
+\textbf{Non} si aggiungono singoli elementi ma intere righe (o colonne), e per farlo di solito si considera la nostra matrice A e si esegue il comando: \pyth{A.append(B)} dove B è un vettore della lunghezza consona.\\
+Allo stesso modo \textbf{Non} si rimuovono singoli elementi ma intere righe (o colonne), e per farlo basta eseguire il comando di \pyth{A.pop(pos)}, per rimuovere l'intera riga alla posizione "pos".
+\end{proof}
+
+\subsection{Condizioni}
+
+\begin{definition}{if, elif, else}{}
+Come eseguire parti di codice in base a certe condizioni usando if, elif ed else.
+\end{definition}
+\begin{proof}
+La sintassi delle scelte condizionali in Python è:
+\begin{python}
+if(condizione):
+    do something
+elif(condizione):
+    do something
+else:
+    do something
+\end{python}
+Con alcuni accorgimenti:
+\begin{enumerate}
+    \item elif è \textbf{opzionale} e ce ne può essere anche più di 1.
+    \item else è \textbf{opzionale} ma ce ne può essere al massimo 1.
+\end{enumerate}
+\end{proof}
+\begin{remark}
+È possibile \textbf{annidare} (ovvero mettere una dentro l'altra) le condizioni. Per non fare confusione il consiglio è di suddividere il problema in sottoproblemi partendo da quello della condizione più \textbf{interna}. Una volta che quella parte funziona si comincia a risalire con le condizioni verso l'esterno.
+\end{remark}
+
+\newpage
+\subsection{Cicli}
+In generale tutti gli esercizi sono svolgibili ciclando solo con cicli while \textbf{ma} con i cicli for spesso il codice risulta più snello e la soluzione è più semplice da pensare. In più usando il ciclo for \textbf{non} si hanno problemi dovuti all'errato utilizzo del contatore. Il prof usa quasi sempre cicli for.\\
+Come già espresso per le condizioni, anche i cicli si possono \textbf{annidare}, e vale esattamente lo stesso consiglio, ovvero, cercare di capire prima cosa deve fare il ciclo più interno per poi spostarsi a quelli più esterni una volta che quello funziona.
+
+\begin{definition}{Ciclo for su una struttura dati}{}
+Come usare il ciclo for per ciclare su una struttura dati
+\end{definition}
+\begin{proof}
+Al contrario di quello che succede in altri linguaggi, in Python il ciclo for si usa spessissimo nella forma \textbf{standard} che permette di ciclare su una struttura dati::
+\begin{python}
+A = [1,2,3]
+for elem in A:
+    do something
+\end{python}
+Svolgendo il contenuto del ciclo for per ogni elemento presente nella struttura dati (una lista in questo caso).
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+    \item \textbf{Non si possono eliminare elementi} da una struttura dati su cui si sta ciclando in questo modo. (In caso usare una nuova struttura dati dove mettere gli elementi interessati)
+    \item A seconda del tipo di \texttt{elem}, le operazioni che si possono svolgere sullo stesso chiaramente cambiano, è importante sapere il tipo di elementi che ci sono nella lista prima di eseguire questo tipo di ciclo.
+\end{enumerate}
+\end{remarks}
+
+\begin{definition}{Ciclo for con range}{}
+Come usare il ciclo for su un range di valori deciso con la funzione range().
+\end{definition}
+\begin{proof}
+La funzione range presenta 3 versioni:
+\begin{enumerate}
+    \item versione con 1 parametro: \pyth{range(max)} che restituisce i numeri da 0 a max-1 con distanza di 1 fra un numero e l'altro.
+    \item versione con 2 parametri: \pyth{range(inizio, max)} che restituisce i numeri da inizio a max-1 con distanza di 1 fra un numero e l'altro.
+    \item versione con 3 parametri: \pyth{range(inizio, max, step)} che restituisce i numeri a partire da inizio a max-1 con distanza di step fra un numero e l'altro.
+\end{enumerate}
+Il ciclo for con l'utilizzo del range permette di ciclare su un contatore che viene automaticamente inizializzato all'interno del ciclo ed incrementato della giusta quantità ad ogni ciclo. La sintassi è la seguente:
+\begin{python}
+for i in range(inizio, max, step):
+    do something
+\end{python}
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+    \item In generale la versione con 3 parametri non è mai sbagliata, ma è meglio  evitarla se possibile, ad esempio è meglio evitare una sintassi del tipo \pyth{for i in range(0, len(A), 1)}, che equivale a \pyth{for i in range(len(A))}
+    \item In questo caso stiamo ciclando con un contatore, quindi sebbene l'idea sia spesso quella di usare il ciclo per scorrere una struttura dati, va notato che il nostro parametro formale adesso è effettivamente un contatore (es.i) che è un numero intero, quindi se per esempio vogliamo eseguire una funzione su ogni elemento di una lista \texttt{A} dovremo riferirci ai suoi elementi usando la forma \pyth{A[i].funzione()}.
+    \item Questa sintassi ci permette anche di ciclare anche a ritroso, usando una forma del tipo:
+    \begin{python}
+for i in range(max-1, inizio-1, -step):
+    do something
+    \end{python}
+\end{enumerate}
+\end{remarks}
+
+\begin{definition}{Ciclo while}{}
+Come usare il ciclo while
+\end{definition}
+\begin{proof}
+In Python l'unico ciclo oltre al for è il ciclo while, il ciclo while è un ciclo precondizionale, ovvero un ciclo in cui la condizione viene verificata prima di eseguire il ciclo stesso. Questo vuol dire che può essere comodo per le situazioni in cui è possibile che il ciclo venga eseguito anche 0 volte. La sintassi è la seguente:
+\begin{python}
+while(condizione verificata):
+    do something
+\end{python}
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+    \item Una  \textbf{rule of thumb} per il ciclo while è che si cicla sempre per vero, è buona norma riscrivere la condizione se si sta ciclando per falso.
+    \item Questo tipo di ciclo è comodo anche per scrivere cicli "infiniti", che terminano solo grazie ad un intervento esterno o comunque a certe circostanze (anche grazie al comando \pyth{break} (spiegato in seguito)), ad es:
+    \begin{python}
+while(True):
+    do something
+    if(condizione):
+        break
+    \end{python}
+    \item A differenza del ciclo for, qui la gestione del contatore è completamente lasciata al programmatore, di conseguenza una delle sintassi più comuni che si vedono è la seguente:
+    \begin{python}
+i,n = 0,10
+while (i < n)
+    do something
+    i += 1
+i = 0 #Solo se la i puo' servire di nuovo in futuro
+    \end{python}
+\end{enumerate}
+\end{remarks}
+
+\begin{definition}{Break}{}
+Come usare il comando break per uscire prematuramente da un ciclo
+\end{definition}
+\begin{proof}
+\textbf{NOTA BENE: Non l'ho visto usato neanche in un compito, neanche quando secondo me ci stava bene, sarebbe da informarsi se dice di non usarlo, se fosse così, vedere la nota della sintassi del break "fatto in casa" con il flag.}\\
+Il comando break si usa per uscire da un ciclo prematuramente, senza dover passare per forza dal controllo in cima al ciclo. \textbf{Si può usare sia in cicli for che in cicli while}. La sintassi è:
+\begin{python}
+while(condizione verificata):
+    do something
+    if(condizione):
+        break
+\end{python}
+\end{proof}
+\begin{remark}
+l break è molto comodo, anche se in generale può essere sostituito nella maggior parte dei casi dall'utilizzo apposito di una variabile flag, come segue:
+\begin{python}
+flag = False
+while(condizione verificata and flag == False):
+    do something
+    if(condizione):
+        flag = True
+\end{python}
+    (Nota personale, a me il break piace abbastanza di più e non vedo perchè demonizzarlo, però per passare l'esame me ne fregherei della mia opinione)
+\end{remark}
+
+\newpage
+\subsection{Funzioni}
+In generale è buona norma usare una funzione ogni volta che si inserisce una funzionalità nel programma.\\
+Le funzioni permettono di evitare la ripetizione di codice, rendono il codice più leggibile e facile da debuggare.\\
+Suddividere il problema in sottoproblemi più semplici risolvibili uno dopo l'altro permette di concentrarsi su una cosa alla volta in modo da sapere subito cosa funziona già e cosa no, e sapere quindi dove apportare modifiche al programma se presenta problemi (l'ultima cosa aggiunta a rigor di logica).
+
+\begin{definition}{Creare una funzione}{}
+Come creare una funzione in python in modo corretto, rispettando le convenzioni e con tutte le buone norme del caso.
+\end{definition}
+\begin{proof}
+La sintassi per dichiarare una funzione di base è:
+\begin{python}
+def function_name(parameter):
+    do something
+    return something
+\end{python}
+\textbf{I parametri} passati in input possono essere da 0 fino a potenzialmente infiniti.\\
+\textbf{Il return} è opzionale, una funzione che non \textbf{ritorna} niente si dice una funzione \textbf{void}, mentre una funzione che ritorna qualcosa si dice una funzione di tipo equivalente al tipo del valore che ritorna.\\
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+    \item In python se il nome di una funzione è composto da più parole si usa la \textbf{snakecase} notation, ovvero si separano le parole con un \_ e si scrive l'intero nome \textbf{in minuscolo} (es. \texttt{nome\_funzione}).
+    \item La funzione può essere scritta in modo che i parametri abbiano dei valori di default, che permettono di richiamare la funzione anche con un numero minore di parametri, usando la sintassi:
+\begin{python}
+def function_name(parameter1, parameter2 = default_value):
+    do something
+    return something
+\end{python}
+    Chiaramente vanno messi prima i parametri senza valore di default, se presenti.\\
+    Non l'ho mai visto necessario negli esercizi, ma può essere una mossa di stile e può aprire a soluzioni interessanti in specifici casi.
+\end{enumerate}
+\end{remarks}
+
+\begin{definition}{Richiamare una funzione}{}
+Come richiamare una funzione presente nel codice.
+\end{definition}
+\begin{proof}
+La sintassi per richiamare una funzione è:
+\begin{python}
+function_name(parameter)
+\end{python}
+Il numero di parametri deve essere coerenti con quelli che sono definiti dalla funzione. Colui che chiama la funzione deve rispettare \textbf{il contratto} che chi l'ha scritta ha deciso, sia per quanto riguarda il numero, che per quanto riguarda l'ordine, dei parametri che devono essere passati.
+\end{proof}
+\begin{remark}
+Esiste un modo per specificare anche i parametri in ordine diverso rispetto a quello "di base", ed è eseguito con la sintassi:
+\begin{python}
+function_name(nome_parametro1 = valore, nome_parametro2 = valore)
+\end{python}
+Tuttavia sconsiglio di usarlo in generale se è evitabile (e negli esercizi     non l'ho mai visto necessario). Può risultare utile se si usano tanti parametri con valori di default e se ne vuole specificare qualcuno anche in disordine.
+\end{remark}
+
+\newpage
+\subsection{Classi e oggetti}
+In Python ogni cosa è un oggetto (che è quello che dice il prof.), tuttavia di base gli oggetti semplici (interi, numeri in virgola mobile, booleani ecc.) si comportano in modo abbastanza diverso da tutti gli altri oggetti.\\
+Anche le classi built-in in python si comportano in modo diverso da quelle che l'utente può creare o che può trovare nelle librerie. Un esempio è la classe "str", built-in, con cui si creano le stringhe, che segue chiaramente sintassi diversa da quella che verrà qui esposta.\\
+Le classi sono di solito utilizzate per rappresentare qualcosa che esiste anche nel mondo reale.\\
+L'idea alla base della classe è quella di avere una parte di codice che permetta di creare degli \textbf{oggetti} di un certo tipo che hanno certe caratteristiche e sono in grado di svolgere delle azioni.\\
+Ogni oggetto di una classe è unico e differente da ogni altro, però hanno tutti in comune (in generale) le caratteristiche che li caratterizzano e le azioni che possono compiere, e per questo il tipo di un oggetto definisce in ogni caso per cosa quello si usa, a discapito di come sarà poi inizializzato a runtime.
+\begin{example}
+Una classe di nome \textbf{Gatto} permette di creare oggetti di tipo Gatto, ognuno con caratteristiche: \textbf{nome, età, colore}, e azioni che può compiere: \textbf{miagola e graffia}. Ogni gatto può avere nome diverso o miagolare in modo diverso, ma se io ho un oggetto di tipo Gatto so per certo che presenterà un nome e che sarà in grado di miagolare.
+\end{example}
+
+\begin{definition}{Come creare una classe}{creare_classe}
+Come creare una classe in python in modo corretto, rispettando le convenzioni e con tutte le buone norme del caso.
+\end{definition}
+\begin{proof}
+La sintassi per creare una classe di base è:
+\begin{python}
+class ClassName:
+    
+    def __init__(self, parameter):
+        self.parameter = parameter
+    
+    def method_name(self, parameter):
+        do something   
+\end{python}
+Per le classi si usa sempre la prima lettera maiuscola e la \textbf{camelcase} notation ovvero tutte le parole che compongono il nome della classe inizieranno in maiuscolo e non ci sarà nessuno spazio fra una parola è l'altra.\\ 
+\texttt{\_\_init\_\_} è detto \textbf{costruttore} e serve per istanziare un oggetto della classe con eventuali parametri passati in input quando si crea l'oggetto (NON si richiama mai direttamente il metodo \texttt{\_\_init\_\_}, lo si chiama solo implicitamente quando si crea l'oggetto (vedi \ref{creare_oggetti})).\\
+\textbf{I parametri} di \texttt{\_\_init\_\_} e di tutti gli altri eventuali metodi della classe, iniziano sempre con il parametro \texttt{self} dopodichè possono esserci da 0 a infiniti altri parametri.\\
+\textbf{Tutti i metodi} della classe, se presenti, seguono le regole delle funzioni classiche con la differenza che il primo parametro deve essere sempre self, ma questo parametro NON sarà mai passato direttamente quando verrà richiamato il metodo
+\end{proof}
+
+\begin{definition}{Importare classi e moduli all'interno di altri file}{}
+Come strutturare il codice usando più file .py in modo da usare le funzioni e le classi messe a disposizione dagli stessi.
+\end{definition}
+\begin{proof}
+Esistono varie sintassi per importare solo specifiche parti di moduli che sarebbero da preferire se siamo al corrente di come li useremo, tuttavia il metodo generico per moduli e file (che contengono funzioni e/o classi) in generale è:
+\begin{python}
+import file_name
+import module_name
+\end{python}
+Così facendo per richiamare direttamente le funzioni provenienti dal modulo o dal file sarà sufficiente usare la sintassi \pyth{file_name.method_name()}.
+\end{proof}
+\begin{remark}
+Per comodità si può decidere di assegnare un nome alternativo con la seguente sintassi:
+\begin{python}
+import file_name as better_file_name
+import module_name as better_module_name
+\end{python}
+\end{remark}
+
+\begin{definition}{Istanziare ed usare gli oggetti}{creare_oggetti}
+Come si istanzia un oggetto di una classe precedentemente creata e come si utilizzano correttamente i suoi metodi e i suoi parametri.
+\end{definition}
+\begin{proof}
+Gli oggetti si istanziano (in parole povere creano) ed usano come segue:
+\begin{python}
+oggetto1 = ClassName("parametro")  #Crea un oggetto di tipo class_name, con parametro "parametro"
+oggetto1.method_name() #Richiama il metodo method_name con parametro self
+var1 = oggetto1.parameter_name #Assegna a var1 il valore nel parametro parameter_name
+\end{python}
+\end{proof}
+\begin{remarks} \leavevmode
+Alcuni accorgimenti da notare quando si usano gli oggetti sono:
+\begin{enumerate}
+    \item il costruttore si richiama richiamando il nome della classe (e non richiamando direttamente il metodo \texttt{\_\_init\_\_()})
+    \item Come si può notare nonostante tutti i metodi dell'oggetto abbiano come parametro in input \texttt{self} (vedi \ref{creare_classe}, in pratica questo NON va mai passato direttamente, ma è automaticamente passato dall'interprete quando si inizializza l'oggetto e quando si richiamano i suoi metodi.
+    \item Nell'esempio il metodo \texttt{method\_name()} è un metodo void, quindi viene richiamato senza assegnare il risultato, tuttavia possono esistere metodi che ritornano dei valori.
+    \item 2 oggetti inizializzati esattamente con gli stessi parametri NON rappresentano lo stesso oggetto.
+    \item Se un metodo ritorna un altro oggetto con campi o metodi si può usare una sintassi del tipo \pyth{oggetto.method_name().other_method_name()} a cascata.
+    \item Spesso ho notato che il prof fa creare le classi ma NON richiede di creare effettivamente oggetti delle stesse all'interno di eventuali altre classi e/o funzioni. Tuttavia è utile sapere come funziona per testare il codice e per capire come strutturare la classe in modo corretto.
+\end{enumerate}
+\end{remarks}
+
+\newpage
+\section{Solutions to common problems}
+
+\begin{definition}{Rimuovere duplicati da una lista}{}
+Data una lista, come rimuovere tutti i valori duplicati al suo interno
+\end{definition}
+\begin{proof}
+ci sono vari metodi con cui si potrebbe risolvere questo problema, tuttavia il più interessante è di sicuro quello di sfruttare il concetto di set, che non può contenere ripetizioni. Usando la funzione built-in \texttt{set()} è possibile trasformare una lista in un set, il che eliminerà automaticamente i duplicati. A quel punto sarà sufficiente usare la funzione built-in \texttt{list()} per trasformare il set di nuovo in una lista.
+\end{proof}
+\begin{example}
+Creare una funzione che, data in input una lista A, ritorna una lista uguale ma rimuovendo i duplicati:
+\begin{python}
+def remove_duplicates(A):
+    return list(set(A))
+\end{python}
+\end{example}
+
+\begin{definition}{Creare una matrice $m*n$}{m*n}
+Come creare una matrice di dimensione m*n con n ed m noti, m numero di righe ed n numero di colonne.
+\end{definition}
+\begin{proof}
+In python al contrario di altri linguaggi non è possibile dichiarare una matrice di dimensione indefinita fin da subito. Per questo ci sono varie logiche che si potrebbero usare per risolvere questo problema. Il metodo preferito dal Prof. è quello di inizializzare un vettore di dimensione indefinita per poi andare a comporre uno alla volta gli m vettori di dimensione n da inserire al suo interno.
+\end{proof}
+\begin{example}
+Creare una matrice di dimensione m*n random (fra 5 e 10) e riempirla di valori random (fra 10 e 100):
+\begin{python}
+import random
+
+A = []  #Matrice che verra' riempita di vettori
+m = random.randint(5,10)
+n = random.randint(5,10)
+
+for i in range(m):
+    B = []  #Ad ogni ciclo reinizializzo il vettore B e poi lo riempio
+    for j in range(n):
+        B.append(random.randint(10,100)) #Inserisco n numeri, uno alla volta, in B
+    A.append(B) #Aggiungo in cima ad A il vettore B precedentemente creato
+\end{python}
+Chiaramente questa soluzione è applicabile a tutti i casi in cui si ha modo di ottenere i valori m,n e tutti quelli interni, in anticipo. (Anche senza usare la funzione random).
+\end{example}
+
+\begin{definition}{Concatenazione di stringhe}{}
+Come concatenare il contenuto di più stringhe così da formarne una singola.
+\end{definition}
+\begin{proof}
+in Python ci sono vari metodi per concatenare stringhe fra loro, in generale però il metodo secondo me più semplice è quello di usare la forma con:
+\begin{python}
+a = f"Stringa {variabile} stringa {variabile} stringa ecc."
+\end{python}
+che permette di concatenare fra loro stringhe con variabili in modo molto snello.\\
+Un'altra versione carina è:
+\begin{python}
+a = "Stringa " + variabile + " stringa " + variabile + " stringa ecc."
+\end{python}
+Molto simile a quella che si usa anche in Java.\\
+Se ho già una stringa e voglio aggiungere un'altra parte di stringa posso usare la classica sintassi \pyth{a += " stringa"} oppure \pyth{a += variabile}
+\end{proof}
+\begin{example}
+Creare una classe che rappresenta un impiegato con nome e salario ed ha un metodo che permette di ritornare una stringa contenente i suoi dati.
+\begin{python}
+class Employee:
+    
+    def __init__(self, name, salary):
+        self.name = name
+        self.salary = salary
+    
+    def employee_information(self):
+        return f"Name: {self.name}, salary: {self.salary}"
+\end{python}
+\end{example}
+
+\begin{definition}{Usare il modulo random}
+Come usare il modulo random per le applicazioni che ci sono nei compiti effettivamente
+\end{definition}
+\begin{proof}
+Per usare le funzioni del modulo random questa va innanzitutto importato \pyth{import random} e successivamente le funzioni più utili sono:
+\begin{enumerate}
+    \item Generare \textbf{interi positivi} in [min,max]: \pyth{random.rand(max,min)}
+    \item Generare valori float in [-1,1): \pyth{random.random()}
+    \item Generare valori float in [min,max): \pyth{min + (max-min)*random.random()}
+\end{enumerate}
+\end{proof}
+\begin{example}
+Scrivere una funzione che generi interi compresi fra 0 e 255:
+\begin{python}
+import random
+
+def generate_int():
+    return random.randint(0,255)
+\end{python}
+\end{example}
+\begin{remark}
+Volendo si potrebbe importare solo la specifica funzione randint per una questione di efficienza, ma non è fondamentale:
+\begin{python}
+from random import randint
+
+def generate_int():
+    return randint(0,255)
+\end{python}
+\end{remark}
+
+\begin{definition}{Lavorare con gli alberi binari di ricerca (ABR)}{}
+Come comportarsi nel caso di esercizi sugli ABR
+\end{definition}
+\begin{proof}
+In generale non ho MAI visto la richiesta di realizzare un intero ABR, tuttavia è importante conoscerne la struttura generale in modo da poterci lavorare.\\
+Spesso viene richiesto di realizzare una variante della classe nodo:
+\begin{python}
+class Node:
+    def __init__(self, data):
+         self.right = None  #Figlio destro vuoto
+         self.left = None   #Figlio sinistro vuoto
+         self.data = data   #Data passato come parametro
+
+    def __str__(self)
+        return f"{self.data}"   #Stringa formato human readable
+
+    def __repr__(self)
+        return f"{self.data}"   #Stringa formato completo (Coincidono perche' data e' banale in questo caso)
+\end{python}
+Con varianti sul tipo di dato che rappresenta \texttt{data}, o con più parametri che rappresentanto \texttt{data}.\\
+Guardare il file \texttt{tree.py} messo dal prof. perchè è completo e mostra come funzionano i metodi degli alberi che poi il prof. \textbf{dà per scontato che si conoscano} nel compito e su cui ci si basi per crearne delle versioni modificate.\\ Se si ha chiaro come è strutturato un ABR non importa impararli a memoria.
+\end{proof}
+
+\newpage
+\section{Common mistakes}
+Di seguito sono elencati alcuni errori comuni che vengono fatti quando si scrive codice python. Aggiornabile durante lo studio come promemoria
+\begin{flagbox}[orange]{Booleani con minuscola}
+I valori booleani in python vogliono la maiuscola: \texttt{True},\texttt{False}.
+\end{flagbox}
+
+\begin{flagbox}[orange]{Scelta delle parentesi}
+Può capitare di non essere sicuri di quali parentesi si applicano ad un certo contesto. La regola semplice secondo me è:
+\begin{itemize}
+    \item \textbf{Tonde}: Chiamate di funzioni o metodi.
+    \item \textbf{Quadre}: Accesso a strutture dati (liste 90\% delle volte).
+    \item \textbf{Graffe}: in python praticamente mai (al contrario di altri linguaggi), volendo per la concatenazione di stringhe.
+\end{itemize}
+\end{flagbox}
+
+\begin{flagbox}[orange]{Tipo di oggetto sbagliato}
+Dato che in python tutto è considerato come un oggetto, cercare di usare dei metodi che non sono applicabili su un certo tipo di dato (ad esempio \texttt{add()} su una variabile intera) restituirà un errore del tipo "il metodo nome\_metodo() non è applicabile al tipo nome\_tipo".\\
+In questo caso la cosa da fare è guardare a runtime quale tipo sta assumendo la variabile in questione, e capire perchè tale metodo non è applicabile alla stessa.
+\end{flagbox}
+
+\begin{flagbox}[orange]{Non inizializzare una variabile}
+In python le variabili non vanno dichiarate prima di utilizzarle. Questo in generale vuol dire che è possibile assegnare qualunque valore ad una variabile che in precedenza non era mai stata dichiarata nel codice.\\
+Tuttavia quello che NON si può fare è cercare di utilizzare il valore contenuto in una variabile non ancora inizializzata.\\
+Se non ho inizializzato la variabile \texttt{var1}, non posso eseguire una chiamata del tipo \texttt{var2 = var1}
+\end{flagbox}
+
+\begin{flagbox}[orange]{Errori generici}
+Scrivendo codice si impara a riconsocere gli errori del codice, inclusi quelli generici o quelli che sono apparentemente significativi ma che in pratica non lo sono. Fra gli errori più comuni che portano ad errori generici ci sono:
+\begin{itemize}
+    \item Indentazione sbagliata
+    \item Parentesi aperta e mai chiusa
+    \item Stringa SENZA virgolette
+    \item Virgolette aperte e mai chiuse
+\end{itemize}
+L'interprete non riesce a gestire bene questi errori perchè cerca di interpretare codice mal scritto, spesso dando errori generici, o errori in altre righe che in realtà sono corrette.
+\end{flagbox}
+
+\end{document}
