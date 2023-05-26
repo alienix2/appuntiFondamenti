@@ -1,4 +1,4 @@
-\documentclass[10pt]{extarticle}
+\documentclass[10pt]{article}
 
 %\usepackage{selectp}
 %\outputonly{1,2,3,4,5,6,7,8,9,10,11,12,13,14}
@@ -971,7 +971,7 @@ Data una struttura dati A (che imponga un ordine negli elementi, quindi ad esemp
 
 \newpage
 \subsection{Matrici}
-nella maggior parte degli ultimi compiti c'è sempre un esercizio su una matrice. Solo in pochi c'è effettivamente da creare una matrice m*n, (vedi \ref{m*n}). Nella maggior parte dei casi la matrice è ricevuta come input e va solo scorsa correttamente.
+Nella maggior parte degli ultimi compiti c'è sempre un esercizio su una matrice. Solo in pochi c'è effettivamente da creare una matrice m*n, (vedi \ref{m*n}). Nella maggior parte dei casi la matrice è ricevuta come input e va solo scorsa correttamente.
 
 \begin{definition}{Accedere ad una matrice}{}
 Data una matrice di elementi \pyth{A = [[1,2,3],[3,2,1]]}, come accedere ad un elemento al suo interno.
@@ -979,7 +979,15 @@ Data una matrice di elementi \pyth{A = [[1,2,3],[3,2,1]]}, come accedere ad un e
 \begin{proof}
 Si usa esattamente la stessa sintassi che per i vettori monodimensionali ma ricordandosi di usare un doppio puntatore, quindi per accedere all'elemento $a_{ij}$ si dovrà accedere ad \pyth{A[i][j]}. Valgono tutti gli accorgimenti espressi per i vettori monodimensionali.
 \end{proof}
-
+\begin{example}
+Creare una funzione (vedi \ref{funzioni}), che data una matrice, stampa uno ad uno tutti gli elementi della stessa:
+\begin{python}
+def stampa_matrice(A):
+    for i in range(len(A)): #Ciclo che scorre le colonne
+        for j in range(len(A[0])):  #Ciclo che scorre la riga della colonna in questione
+            print(A[i][j])
+\end{python}
+\end{example}
 \begin{definition}{Aggiungere e rimuovere elementi}{}
 Data una matrice di elementi \pyth{A = [[1,2,3],[3,2,1]]}, come aggiungere e rimuovere elementi
 \end{definition}
@@ -989,6 +997,7 @@ Il metodo più semplice per capire come fare ad aggiungere e rimuovere elementi 
 Allo stesso modo \textbf{Non} si rimuovono singoli elementi ma intere righe (o colonne), e per farlo basta eseguire il comando di \pyth{A.pop(pos)}, per rimuovere l'intera riga alla posizione "pos".
 \end{proof}
 
+\newpage
 \subsection{Condizioni}
 
 \begin{definition}{if, elif, else}{}
@@ -1124,6 +1133,7 @@ while(condizione verificata and flag == False):
 
 \newpage
 \subsection{Funzioni}
+\label{funzioni}
 In generale è buona norma usare una funzione ogni volta che si inserisce una funzionalità nel programma.\\
 Le funzioni permettono di evitare la ripetizione di codice, rendono il codice più leggibile e facile da debuggare.\\
 Suddividere il problema in sottoproblemi più semplici risolvibili uno dopo l'altro permette di concentrarsi su una cosa alla volta in modo da sapere subito cosa funziona già e cosa no, e sapere quindi dove apportare modifiche al programma se presenta problemi (l'ultima cosa aggiunta a rigor di logica).
