@@ -857,8 +857,9 @@ Date due variabili \pyth{a,b = 0,0} come eseguire altri tipi di operazioni fra l
 \end{proof}
 
 \newpage
-\subsection{Liste e altre strutture dati monodimensionali}
-Quello che viene espresso in questa sezione riguarda la liste. Verrà anche data una breve spiegazione di cosa sono i set e i dizionari. Ho visto poco usati questi ultimi due negli esercizi, se non per casi molto specifici. \textbf{Nella sezione delle solutions to common problems}, ci sono le applicazioni principali di set e dizionari (una per ognuno) che al prof. piacciono tanto e che in effetti sono molto carine e si usano anche nella vita reale.
+\subsection{Liste, set e dizionari}
+Quello che viene espresso in questa sezione riguarda la liste. Verrà anche data una breve spiegazione di cosa sono i set e i dizionari.\\
+\textbf{Nella sezione delle solutions to common problems}, ci sono le applicazioni principali di set e dizionari (una per ognuno) che al prof. piacciono tanto e che in effetti sono molto carine e si usano anche nella vita reale.
 
 \begin{definition}{Creare una lista}{}
 Come creare una lista di elementi
@@ -876,7 +877,7 @@ print(A[0])
 restituirà errore
 \end{remark}
 
-\begin{definition}{Creare (e utilizzare) altre strutture dati}{}
+\begin{definition}{Creare (e utilizzare) set e dizionari}{}
 Come creare altre strutture dati utili (e utilizzarle) (Set e dizionari)
 \end{definition}
 \begin{proof}
@@ -951,6 +952,22 @@ Data una lista di elementi \pyth{A = [x,y,z]} come aggiungere e rimuovere elemen
 \begin{remark}
 Il metodo pop ritorna l'elemento rimosso, mentre il metodo remove no, per cui un'istruzione del tipo \\\pyth{a = A.pop(pos)} assegnerà ad a il valore contenuto in \pyth{A[pos]}, mentre \pyth{a = A.remove(elem)} assegnera ad a il valore "None" (e non ha quindi senso di essere usato così).
 \end{remark}
+
+\begin{definition}{Ordinare gli elementi in una struttura dati}{}
+Data una struttura dati A (che imponga un ordine negli elementi, quindi ad esempio NON un set), come ordinare gli elementi al suo interno
+\end{definition}
+\begin{proof}
+\begin{enumerate}
+	\item Restituire una lista ordinata data una struttura dati: \pyth{B = sorted(A)}
+	\item Ordinare le liste (e SOLO le liste): \pyth{A.sort()}
+\end{enumerate}
+\end{proof}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+	\item Il metodo \texttt{sorted} si applica ad un qualunque elenco di valori ma \textbf{ritorna sempre una lista}, quindi è possibile ad esempio usare il metodo per ordinare gli elementi in un set e ottenere una lista con gli stessi elementi all'interno del set ma ordinati.
+	\item Il metodo \texttt{sorted} può ricevere i parametri \texttt{reversed} e \texttt{key} che permettono di decidere in base a cosa ordinare la lista e se ordinarla all'inverso. Non ho mai visto essenziale il metodo \texttt{key}, \texttt{reversed} invece è abbastanza intuitivo e può tornare utile: \pyth{A.sort(reversed = true)}
+\end{enumerate}
+\end{remarks}
 
 \newpage
 \subsection{Matrici}
@@ -1161,7 +1178,7 @@ Tuttavia sconsiglio di usarlo in generale se è evitabile (e negli esercizi     
 In Python ogni cosa è un oggetto (che è quello che dice il prof.), tuttavia di base gli oggetti semplici (interi, numeri in virgola mobile, booleani ecc.) si comportano in modo abbastanza diverso da tutti gli altri oggetti.\\
 Anche le classi built-in in python si comportano in modo diverso da quelle che l'utente può creare o che può trovare nelle librerie. Un esempio è la classe "str", built-in, con cui si creano le stringhe, che segue chiaramente sintassi diversa da quella che verrà qui esposta.\\
 Le classi sono di solito utilizzate per rappresentare qualcosa che esiste anche nel mondo reale.\\
-L'idea alla base della classe è quella di avere una parte di codice che permetta di creare degli \textbf{oggetti} di un certo tipo che hanno certe caratteristiche e sono in grado di svolgere delle azioni.\\
+L'idea alla base della classe è quella di avere una parte di codice che permetta di creare degli \textbf{oggetti} di un certo tipo che hanno certe caratteristiche (\textbf{attributi}) e sono in grado di svolgere delle azioni (\textbf{metodi}).\\
 Ogni oggetto di una classe è unico e differente da ogni altro, però hanno tutti in comune (in generale) le caratteristiche che li caratterizzano e le azioni che possono compiere, e per questo il tipo di un oggetto definisce in ogni caso per cosa quello si usa, a discapito di come sarà poi inizializzato a runtime.
 \begin{example}
 Una classe di nome \textbf{Gatto} permette di creare oggetti di tipo Gatto, ognuno con caratteristiche: \textbf{nome, età, colore}, e azioni che può compiere: \textbf{miagola e graffia}. Ogni gatto può avere nome diverso o miagolare in modo diverso, ma se io ho un oggetto di tipo Gatto so per certo che presenterà un nome e che sarà in grado di miagolare.
@@ -1169,6 +1186,7 @@ Una classe di nome \textbf{Gatto} permette di creare oggetti di tipo Gatto, ognu
 
 \begin{definition}{Come creare una classe}{creare_classe}
 Come creare una classe in python in modo corretto, rispettando le convenzioni e con tutte le buone norme del caso.
+\label{creare_classe}
 \end{definition}
 \begin{proof}
 La sintassi per creare una classe di base è:
@@ -1208,6 +1226,7 @@ import module_name as better_module_name
 
 \begin{definition}{Istanziare ed usare gli oggetti}{creare_oggetti}
 Come si istanzia un oggetto di una classe precedentemente creata e come si utilizzano correttamente i suoi metodi e i suoi parametri.
+\label{creare_oggetti}
 \end{definition}
 \begin{proof}
 Gli oggetti si istanziano (in parole povere creano) ed usano come segue:
@@ -1248,6 +1267,7 @@ def remove_duplicates(A):
 
 \begin{definition}{Creare una matrice $m*n$}{m*n}
 Come creare una matrice di dimensione m*n con n ed m noti, m numero di righe ed n numero di colonne.
+\label{m*n}
 \end{definition}
 \begin{proof}
 In python al contrario di altri linguaggi non è possibile dichiarare una matrice di dimensione indefinita fin da subito. Per questo ci sono varie logiche che si potrebbero usare per risolvere questo problema. Il metodo preferito dal Prof. è quello di inizializzare un vettore di dimensione indefinita per poi andare a comporre uno alla volta gli m vettori di dimensione n da inserire al suo interno.
@@ -1352,7 +1372,6 @@ class Node:
 Con varianti sul tipo di dato che rappresenta \texttt{data}, o con più parametri che rappresentanto \texttt{data}.\\
 Guardare il file \texttt{tree.py} messo dal prof. perchè è completo e mostra come funzionano i metodi degli alberi che poi il prof. \textbf{dà per scontato che si conoscano} nel compito e su cui ci si basi per crearne delle versioni modificate.\\ Se si ha chiaro come è strutturato un ABR non importa impararli a memoria.
 \end{proof}
-
 \newpage
 \section{Common mistakes}
 Di seguito sono elencati alcuni errori comuni che vengono fatti quando si scrive codice python. Aggiornabile durante lo studio come promemoria
