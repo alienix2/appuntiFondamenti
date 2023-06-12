@@ -1300,6 +1300,30 @@ for i in range(m):
 Chiaramente questa soluzione è applicabile a tutti i casi in cui si ha modo di ottenere i valori m,n e tutti quelli interni, in anticipo. (Anche senza usare la funzione random).
 \end{example}
 
+\begin{definition}{Creare una nuova matrice vuota}{}
+Come creare una matrice B, di dimensione corretta partendo da un'altra matrice, A, in modo veloce (senza dover usare il metodo classico per riempire una matrice di numeri)
+\end{definition}
+\begin{proof}
+L'idea è quella di creare delle righe di lunghezza nota usando la sintassi: \pyth{row = [0]*len(A)} e poi inserire tutte queste righe una ad una dentro la nuova matrice B
+\end{proof}
+\begin{example}
+Creare una classe che ritorni una nuova matrice, B, di zeri delle stesse dimensioni di una matrice, A, passata in input:
+\begin{python}
+def matrice_zeri(A):
+    B = []  #Matrice che verra' riempita di zeri
+    for riga in range(len(A)):
+        row = [0]*len(A[0])    #A ogni ciclo crea una nuova riga di zeri
+        B.append(row)       #Inserisco la riga nella matrice B
+    return B                #Ritorno perche' e' una funzione
+\end{python}
+\end{example}
+\begin{remarks} \leavevmode
+\begin{enumerate}
+	\item In generale se sono in grado di conoscere lunghezza ed altezza della nuova matrice, posso usare queste metodo per creare una matrice di zeri, anche senza averne un'altra di partenza (rimpiazzando correttamente le righe dove vengono usati \pyth{len(A)} e \pyth{len(A[0])}.
+	\item \textbf{E' fondamentale} che la riga \pyth{row = [0]*len[A]} sia \textbf{dentro} il ciclo for, in questo modo ad ogni passaggio viene creata una nuova posizione di memoria e non viene usata sempre la stessa. Se si mette questa riga di codice fuori, tutte le righe hanno le posizioni in colonna connesse alla stessa posizione di memoria, e ad esempio modificare la posizione \pyth{A[0][0]} porta a modificare tutte le posizioni \pyth{A[0][x]}
+\end{enumerate}
+\end{remarks}
+
 \begin{definition}{Concatenazione di stringhe}{}
 Come concatenare il contenuto di più stringhe così da formarne una singola.
 \end{definition}
